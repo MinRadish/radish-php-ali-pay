@@ -1,0 +1,22 @@
+{
+    "name": "min-radish/php-ali-pay",
+    "description": "PHP对支付宝API的调用",
+    "keywords": ["PHP", "ali", "Pay", "tool"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Radish",
+            "email": "1004622952@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.0.0",
+        "min-radish/php-curl": "~1.2"
+    },
+    "autoload": {
+        "psr-4": {
+          "Radish\\AliPay\\": "src/"
+        }
+    }
+}
