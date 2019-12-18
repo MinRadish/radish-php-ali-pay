@@ -1,7 +1,7 @@
 {
     "name": "min-radish/php-ali-pay",
     "description": "PHP对支付宝API的调用",
-    "keywords": ["PHP", "ali", "Pay", "tool"],
+    "keywords": ["PHP", "Ali", "Pay", "Tool Class"],
     "type": "library",
     "license": "MIT",
     "authors": [

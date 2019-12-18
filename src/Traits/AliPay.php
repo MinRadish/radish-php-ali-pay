@@ -80,7 +80,11 @@ trait AliPay
                 break;
             
             case self::SIGN_PATTERN_PUBLICK:
-                $resource = $this->rsaPrivateKey;
+                if (strstr($this->rsaPrivateKey, '-----')) {
+                    $resource = $this->rsaPrivateKey;
+                } else {
+                    $resource = "-----BEGIN RSA PRIVATE KEY-----\n" . wordwrap($this->rsaPrivateKey, 64, "\n", true) . "\n-----END RSA PRIVATE KEY-----";
+                }
                 break;
             
             default:

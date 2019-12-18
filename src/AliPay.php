@@ -82,5 +82,10 @@ abstract class AliPay
 
         return $map;        
     }
+
+    public function __construct()
+    {
+        
+    }
     
 }
