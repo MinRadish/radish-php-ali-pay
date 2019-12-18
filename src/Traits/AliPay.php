@@ -18,7 +18,7 @@ trait AliPay
     {
         $params = $this->formatParam($options);
         $params['sign'] = base64_encode($this->sgin($params));
-
+        
         return $this->sendResult($params);
     }
 
@@ -42,9 +42,9 @@ trait AliPay
                 self::throwx('无效的秘钥方式');
                 break;
         }
-        $options['biz_content'] = json_encode($options['biz_content']);
+        $params['biz_content'] = json_encode($params['biz_content']);
 
-        return $options;
+        return $params;
     }
 
     /**
@@ -65,7 +65,7 @@ trait AliPay
             openssl_free_key($resource);
         }
 
-        return $sgin;
+        return $sign;
     }
 
     /**

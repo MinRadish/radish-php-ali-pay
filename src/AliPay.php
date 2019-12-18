@@ -9,6 +9,9 @@ namespace Radish\AliPay;
 
 abstract class AliPay 
 {
+    use Traits\Common;
+    use Traits\AliPay;
+
     const SIGN_PATTERN_PUBLICK_FILE = 1;
     const SIGN_PATTERN_PUBLICK = 2;
 

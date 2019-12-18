@@ -114,7 +114,7 @@ trait Common
      * @param  string $urlKey 请求地址
      * @return mixed          响应结果
      */
-    protected function sendResult(array $params, string $urlKey, bool $sslCert = false)
+    protected function sendResult(array $params, bool $sslCert = false)
     {
         $option = [
             CURLOPT_SSL_VERIFYPEER => false,
@@ -140,7 +140,7 @@ trait Common
         $params = [
             'app_id' => $this->appId,
             'charset' => 'utf-8',
-            'sign_type' => 'RSA2',
+            'sign_type' => $this->signType,
             'timestamp' => date('Y-m-d H:i:s'),
             'version' => '1.0',
         ];
@@ -163,6 +163,6 @@ trait Common
 
     public static function throwx($msg = '位置错误', $result = 'not result')
     {
-        throw new \Radish\AliPay\Exception\WeChatPayException($msg, 'not result');
+        throw new \Radish\AliPay\Exception\PayException($msg, 'not result');
     }
 }
