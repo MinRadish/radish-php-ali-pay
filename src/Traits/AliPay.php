@@ -18,8 +18,11 @@ trait AliPay
     {
         $params = $this->formatParam($options);
         $params['sign'] = base64_encode($this->sgin($params));
-        
-        return $this->sendResult($params);
+        if ($this->isCurl) {
+            return $this->sendResult($params);
+        } else {
+            return $params;
+        }
     }
 
     /**

@@ -75,6 +75,18 @@ abstract class AliPay
      */
     protected $signType = 'RSA2';
 
+    /**
+     * 调用接口
+     * @var string
+     */
+    public $method = 'alipay.trade.page.pay';
+
+   /**
+     * 是否curl提交参数
+     * @var string
+     */
+    public $isCurl = true;
+
     public function getSignPatternField($key = null)
     {
         $map = [

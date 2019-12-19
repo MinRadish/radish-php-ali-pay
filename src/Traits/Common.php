@@ -42,13 +42,14 @@ trait Common
     protected function getMessage($json, $fun = '')
     {
         $array = json_decode($json, true);
-        if ($array['alipay_trade_page_pay_response']['code'] != '10000') {
+        $key = str_replace('.', '_', $this->method) . '_response';
+        if ($array[$key]['code'] != '10000') {
             $msg = '支付请求失败!';
             if ($fun && method_exists($this, $fun)) {
                 $temp = $this->$fun($array['err_code']);
                 $temp && $msg = $temp;
             } else {
-                isset($array['alipay_trade_page_pay_response']['msg']) && $msg = $array['alipay_trade_page_pay_response']['msg'];
+                isset($array[$key]['msg']) && $msg = $array[$key]['msg'];
             }
             $this->throwx($msg, $json);
         } else {
@@ -83,10 +84,29 @@ trait Common
     {
         $codeMap = [
             //获取access_token
-            '-1' => '系统繁忙，此时请开发者稍候再试',
-            '40001' => 'AppSecret错误或者AppSecret不属于这个公众号，请开发者确认AppSecret的正确性',
-            '40002' => '请确保grant_type字段值为client_credential',
-            '40164' => '调用接口的IP地址不在白名单中，请在接口IP白名单中进行设置。（小程序及小游戏调用不要求IP地址在白名单内。）',
+            'ACQ.SYSTEM_ERROR' => '接口返回错误',
+            'ACQ.INVALID_PARAMETER' => '参数无效',
+            'ACQ.ACCESS_FORBIDDEN' => '无权限使用接口',
+            'ACQ.EXIST_FORBIDDEN_WORD' => '订单信息中包含违禁词',
+            'ACQ.PARTNER_ERROR' => '应用APP_ID填写错误',
+            'ACQ.TOTAL_FEE_EXCEED' => '订单总金额不在允许范围内',
+            'ACQ.CONTEXT_INCONSISTENT' => '交易信息被篡改',
+            'ACQ.TRADE_HAS_SUCCESS' => '交易已被支付',
+            'ACQ.TRADE_HAS_CLOSE' => '交易已经关闭',
+            'ACQ.BUYER_BALANCE_NOT_ENOUGH' => '买家余额不足',
+            'ACQ.BUYER_BANKCARD_BALANCE_NOT_E' => '用户银行卡余额不足',
+            'ACQ.ERROR_BALANCE_PAYMENT_DISABL' => '余额支付功能关闭',
+            'ACQ.BUYER_SELLER_EQUAL' => '买卖家不能相同',
+            'ACQ.TRADE_BUYER_NOT_MATCH' => '交易买家不匹配',
+            'ACQ.BUYER_ENABLE_STATUS_FORBID' => '买家状态非法',
+            'ACQ.PAYMENT_FAIL' => '支付失败',
+            'ACQ.BUYER_PAYMENT_AMOUNT_DAY_LIM' => '买家付款日限额超限',
+            'ACQ.BUYER_PAYMENT_AMOUNT_MONTH_L' => '买家付款月额度超限',
+            'ACQ.ERROR_BUYER_CERTIFY_LEVEL_LI' => '买家未通过人行认证',
+            'ACQ.PAYMENT_REQUEST_HAS_RISK' => '支付有风险',
+            'ACQ.NO_PAYMENT_INSTRUMENTS_AVAIL' => '没用可用的支付工具',
+            'ACQ.ILLEGAL_SIGN_VALIDTY_PERIOD' => '无效的签约有效期',
+            'ACQ.MERCHANT_AGREEMENT_NOT_EXIST' => '商户协议不存在',
         ];
         $info = isset($codeMap[$key]) ? $codeMap[$key] : false;
 
@@ -139,7 +159,8 @@ trait Common
     {
         $params = [
             'app_id' => $this->appId,
-            'charset' => 'utf-8',
+            'method' => $this->method,
+            'charset' => 'UTF-8',
             'sign_type' => $this->signType,
             'timestamp' => date('Y-m-d H:i:s'),
             'version' => '1.0',
@@ -161,8 +182,13 @@ trait Common
         return $resource;
     }
 
+    /**
+     * 快捷抛出异常
+     * @param  string $msg      错误信息
+     * @return string $result   curl请求信息
+     */
     public static function throwx($msg = '位置错误', $result = 'not result')
     {
-        throw new \Radish\AliPay\Exception\PayException($msg, 'not result');
+        throw new \Radish\AliPay\Exception\PayException($msg, $result);
     }
 }
