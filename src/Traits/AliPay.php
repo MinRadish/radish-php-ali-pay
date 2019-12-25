@@ -73,20 +73,28 @@ trait AliPay
 
     /**
      * 获取证书资源
-     * @return string   证书资源
+     * @param  array $type  秘钥类型
+     * @return string       证书资源
      */
-    private function getResource()
+    private function getResource($type = 'private')
     {
+        if ($type == 'private') {
+            $key = $this->rsaPrivateKey;
+            $keyIdentifying = "RSA PRIVATE";
+        } else {
+            $key = $this->rsaPublicKey;
+            $keyIdentifying = "PUBLIC";
+        }
         switch ($this->signPattern) {
             case self::SIGN_PATTERN_PUBLICK_FILE:
-                $resource = $this->getRsaPrivateKey($this->rsaPrivateKey);
+                $resource = $this->getRsaResource($key);
                 break;
             
             case self::SIGN_PATTERN_PUBLICK:
-                if (strstr($this->rsaPrivateKey, '-----')) {
-                    $resource = $this->rsaPrivateKey;
+                if (strstr($key, '-----')) {
+                    $resource = $key;
                 } else {
-                    $resource = "-----BEGIN RSA PRIVATE KEY-----\n" . wordwrap($this->rsaPrivateKey, 64, "\n", true) . "\n-----END RSA PRIVATE KEY-----";
+                    $resource = "-----BEGIN {$keyIdentifying} KEY-----\n" . wordwrap($key, 64, "\n", true) . "\n-----END {$keyIdentifying} KEY-----";
                 }
                 break;
             

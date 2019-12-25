@@ -174,10 +174,14 @@ trait Common
      * @param  string $path      秘钥路径
      * @return string            私钥资源
      */
-    protected function getRsaPrivateKey($path)
+    protected function getRsaResource($path, $keyType = 'private')
     {
-        $privateKey = file_get_contents($path);
-        $resource = openssl_get_privatekey($privateKey);
+        $keyContent = file_get_contents($path);
+        if ($keyType == 'private') {
+            $resource = openssl_get_privatekey($keyContent);
+        } else {
+            $resource = openssl_get_publickey($keyContent);
+        }
 
         return $resource;
     }
@@ -220,7 +224,7 @@ trait Common
         $params['sign_type'] = null;
         $params['sign'] = null;
         $plaintext = $this->jointString($params);
-        $resource = $this->getResource();
+        $resource = $this->getResource('public');
         if ($this->signType == 'RSA2') {
             $result = (openssl_verify($plaintext, base64_decode($sign), $resource, OPENSSL_ALGO_SHA256)===1);
         } else {
