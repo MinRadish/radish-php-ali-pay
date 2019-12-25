@@ -191,4 +191,45 @@ trait Common
     {
         throw new \Radish\AliPay\Exception\PayException($msg, $result);
     }
+
+    /**
+     * 转换字符集编码
+     * @param $data
+     * @param $targetCharset
+     * @return string
+     */
+    protected function characet($data, $targetCharset) 
+    {
+        if (!empty($data)) {
+            $fileType = $this->fileCharset;
+            if (strcasecmp($fileType, $targetCharset) != 0) {
+                $data = mb_convert_encoding($data, $targetCharset, $fileType);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * 回调验签
+     * @param array $params   参数
+     * @return bool
+     */
+    public function notify(array $params)
+    {
+        $sign = $params['sign'];
+        $params['sign_type'] = null;
+        $params['sign'] = null;
+        $plaintext = $this->jointString($params);
+        $resource = $this->getResource();
+        if ($this->signType == 'RSA2') {
+            $result = (openssl_verify($plaintext, base64_decode($sign), $resource, OPENSSL_ALGO_SHA256)===1);
+        } else {
+            $result = (openssl_verify($plaintext, base64_decode($sign), $resource)===1);
+        }
+        if ($this->signPattern == self::SIGN_PATTERN_PUBLICK_FILE) {
+            openssl_free_key($resource);
+        }
+
+        return $result;
+    }
 }

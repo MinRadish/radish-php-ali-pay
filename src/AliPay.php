@@ -52,13 +52,13 @@ abstract class AliPay
     protected $appCertPublicKey;
 
     /**
-     * rsa私钥证书
+     * RSA私钥证书
      * @var string
      */
     protected $rsaPrivateKey;
 
     /**
-     * rsa公钥证书
+     * RSA公钥证书
      * @var string
      */
     protected $rsaPublicKey;
@@ -81,11 +81,23 @@ abstract class AliPay
      */
     public $method = 'alipay.trade.page.pay';
 
-   /**
+    /**
      * 是否curl提交参数
      * @var string
      */
     public $isCurl = true;
+
+    /**
+     * 文件编码
+     * @var string
+     */
+    protected $fileCharset = 'UTF-8';
+
+    /**
+     * 表单提交字符集编码
+     * @var string
+     */
+    protected $postCharset = 'UTF-8';
 
     public function getSignPatternField($key = null)
     {
@@ -98,9 +110,25 @@ abstract class AliPay
         return $map;        
     }
 
-    public function __construct()
+    /**
+     * 获取URL地址
+     * @return string
+     */
+    public function getUrl()
     {
-        
+        return $this->url;
+    }
+
+    /**
+     * 构造方法
+     */
+    public function __construct(array $params = [])
+    {
+        foreach ($params as $key => $val) {
+            if (property_exists($this, $key) && !empty($val)) {
+                $this->$key = $val;
+            }
+        }
     }
     
 }
