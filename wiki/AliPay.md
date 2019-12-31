@@ -22,3 +22,24 @@ $params = [
 ];
 $fromParams = $aliPay->orderUnify($params);
 ~~~
+
+### alipay.trade.refund
+
+- 应用场景-统一退款
+
+**示例**
+
+~~~
+$aliPay = new AliPay;
+$params = [
+    'out_trade_no' => '20191231155819',
+    'refund_amount' => '0.01',
+];
+try {
+    $result = $aliPay->tradeRefund($params);
+    return success('退款成功！');
+} catch (\Exception $e) {
+    return error($e->getMessage());
+}
+~~~
+

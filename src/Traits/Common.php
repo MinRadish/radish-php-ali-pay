@@ -68,11 +68,29 @@ trait Common
         ksort($params);
         $d = $string = '';
         foreach ($params as $key => $val) {
-            $val && $string .= $d . $key . '=' . $val;
+            !$this->checkEmpty($val) && ("@" != substr($val, 0, 1)) && $string .= $d . $key . '=' . $val;
             $d = $connector;
         }
 
         return $string;
+    }
+
+    /**
+     * 校验$val
+     * @param  string  $val    字符串
+     * @return bool            如果为空则返回true
+     **/
+    protected function checkEmpty($val) 
+    {
+        if (!isset($val)) {
+            return true;
+        } else if ($val === null) {
+            return true;
+        } else if (trim($val) === "") {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -224,9 +242,9 @@ trait Common
         $params['sign_type'] = null;
         $params['sign'] = null;
         $plaintext = $this->jointString($params);
-        $resource = $this->getResource('public');
+        $resource = $this->getResource('certPublicKey');
         if ($this->signType == 'RSA2') {
-            $result = (openssl_verify($plaintext, base64_decode($sign), $resource, OPENSSL_ALGO_SHA256)===1);
+            $result = (openssl_verify($plaintext, base64_decode($sign), $resource, version_compare(PHP_VERSION,'5.4.0', '<') ? SHA256 : OPENSSL_ALGO_SHA256)===1);
         } else {
             $result = (openssl_verify($plaintext, base64_decode($sign), $resource)===1);
         }

@@ -26,6 +26,22 @@ trait AliPay
     }
 
     /**
+     * 同一下单
+     * @param  array $options 请求参数
+     * @return           
+     */
+    public function tradeRefund(array $content, $method = 'alipay.trade.refund')
+    {
+        $this->method = $method;
+        $params = [
+            'biz_content' => $content,
+        ];
+        $result = $this->orderUnify($params);
+
+        return $result;
+    }
+
+    /**
      * 格式化请求初始参数
      * @param  array $options 初始值
      * @return array          格式化后的值
@@ -76,14 +92,23 @@ trait AliPay
      * @param  array $type  秘钥类型
      * @return string       证书资源
      */
-    private function getResource($type = 'private')
+    private function getResource($type = 'rsaPrivateKey')
     {
-        if ($type == 'private') {
-            $key = $this->rsaPrivateKey;
-            $keyIdentifying = "RSA PRIVATE";
-        } else {
-            $key = $this->rsaPublicKey;
-            $keyIdentifying = "PUBLIC";
+        switch ($type) {
+            case 'certPublicKey':
+                $key = $this->certPublicKey;
+                $keyIdentifying = "PUBLIC";
+                break;
+            
+            case 'rsaPrivateKey':
+                $key = $this->rsaPrivateKey;
+                $keyIdentifying = "RSA PRIVATE";
+                break;
+            
+            case 'rsaPublicKey':
+                $key = $this->rsaPublicKey;
+                $keyIdentifying = "PUBLIC";
+                break;
         }
         switch ($this->signPattern) {
             case self::SIGN_PATTERN_PUBLICK_FILE:
