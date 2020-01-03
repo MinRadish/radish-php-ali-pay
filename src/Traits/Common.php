@@ -148,11 +148,11 @@ trait Common
 
     /**
      * 公共的请求接口的方法
-     * @param  array  $params 请求参数
+     * @param  mixed[string|array] $params 请求参数
      * @param  string $urlKey 请求地址
      * @return mixed          响应结果
      */
-    protected function sendResult(array $params, bool $sslCert = false)
+    protected function sendResult($params, bool $sslCert = false)
     {
         $option = [
             CURLOPT_SSL_VERIFYPEER => false,

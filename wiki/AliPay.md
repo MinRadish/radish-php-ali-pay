@@ -47,6 +47,28 @@ $params = $aliPay->orderUnify($params);
 $url = $aliPay->getUrl();
 ~~~
 
+### alipay.trade.precreate
+
+- 应用场景-用户扫描二维码完成订单支付
+
+**示例**
+
+~~~
+$aliPay = new AliPay;
+$aliPay->method = 'alipay.trade.precreate';
+$aliPay->curlParamsType = 'string';
+$params = [
+    'notify_url' => url('index/index/notify', [], false, true),
+    'biz_content' => [
+        'out_trade_no' => date('YmdHis'),
+        'total_amount' => '0.01',
+        'subject' => '阿斯达四大',
+    ],
+];
+$params = $aliPay->orderUnify($params);
+print_r($params);die;
+~~~
+
 ### alipay.trade.refund
 
 - 应用场景-统一退款

@@ -99,6 +99,12 @@ abstract class AliPay
      */
     protected $postCharset = 'UTF-8';
 
+    /**
+     * curl 提交参数格式
+     * @var string
+     */
+    public $curlParamsType = 'array';
+
     public function getSignPatternField($key = null)
     {
         $map = [

@@ -19,6 +19,9 @@ trait AliPay
         $params = $this->formatParam($options);
         $params['sign'] = base64_encode($this->sgin($params));
         if ($this->isCurl) {
+            if ($this->curlParamsType != 'array' && is_array($params)) {
+                $params = http_build_query($params);
+            }
             return $this->sendResult($params);
         } else {
             return $params;
@@ -26,7 +29,7 @@ trait AliPay
     }
 
     /**
-     * 同一下单
+     * 同一退款下单
      * @param  array $options 请求参数
      * @return           
      */
