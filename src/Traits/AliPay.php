@@ -10,7 +10,7 @@ namespace Radish\AliPay\Traits;
 trait AliPay
 {
     /**
-     * 同一下单
+     * 统一下单
      * @param  array $options 请求参数
      * @return           
      */
@@ -29,7 +29,7 @@ trait AliPay
     }
 
     /**
-     * 同一退款下单
+     * 统一退款下单
      * @param  array $options 请求参数
      * @return           
      */
