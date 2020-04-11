@@ -23,7 +23,7 @@ class PayException extends \Exception
     {
         $path = $_SERVER['DOCUMENT_ROOT'];
         if (is_dir($path)) {
-                        $path .= DIRECTORY_SEPARATOR . 'AliPay';
+            $path .= DIRECTORY_SEPARATOR . 'AliPay';
             if (!is_dir($path)) {
                 mkdir($path);
             }
@@ -41,6 +41,6 @@ class PayException extends \Exception
 
     public function result()
     {
-        return $this->result;
+        return mb_convert_encoding($this->result, 'UTF-8', mb_detect_encoding($this->result));
     }
 }

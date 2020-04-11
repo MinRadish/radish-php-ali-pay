@@ -41,7 +41,7 @@ trait Common
      */
     protected function getMessage($json, $fun = '')
     {
-        $array = json_decode($json, true);
+        $array = json_decode(mb_convert_encoding($json, 'UTF-8', mb_detect_encoding($json)), true);
         $key = str_replace('.', '_', $this->method) . '_response';
         if ($array[$key]['code'] != '10000') {
             $msg = '支付请求失败!';
