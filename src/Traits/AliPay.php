@@ -64,7 +64,7 @@ trait AliPay
                 self::throwx('无效的秘钥方式');
                 break;
         }
-        $params['biz_content'] = json_encode($params['biz_content']);
+        $params['biz_content'] = (string)json_encode($params['biz_content']);
 
         return $params;
     }
