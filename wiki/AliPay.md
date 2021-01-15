@@ -35,6 +35,7 @@ $aliPay->method = 'alipay.trade.wap.pay';
 $aliPay->isCurl = false;
 $params = [
     'notify_url' => url('index/index/notify', [], false, true),
+    'return_url' => input('quit_url', url('/', [], false, true)),
     'biz_content' => [
         'out_trade_no' => date('YmdHis'),
         'total_amount' => '0.01',
